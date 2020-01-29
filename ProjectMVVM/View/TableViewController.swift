@@ -8,12 +8,32 @@
 
 import UIKit
 
+@available(iOS 11.0, *)
 class TableViewController: UITableViewController {
     
     var viewModel: TableViewViewModelType?
+    var students: ViewModel?
+    
+    private let searchController = UISearchController(searchResultsController: nil)
+    var filteredStudents = [Profile]()
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    private var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Setup the search controller
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+        
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -23,6 +43,7 @@ class TableViewController: UITableViewController {
         
         viewModel = ViewModel()
     }
+    
 
     // MARK: - Table view data source
 
@@ -33,12 +54,10 @@ class TableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        if isFiltering {
+            return filteredStudents.count
+        }
         return viewModel?.numberOfRows() ?? 0
-    }
-    
-    // footer
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-       return "Footer \(section)"
     }
 
     
@@ -47,10 +66,19 @@ class TableViewController: UITableViewController {
         
         guard let tableViewCell = cell, let viewModel = viewModel else { return UITableViewCell() } // проверка
 
-        
+        // generation of a new window
         let cellViewModel = viewModel.cellViewModel(forIndexPath: indexPath)
         
         tableViewCell.viewModel = cellViewModel
+        
+        // search
+        var student: Profile!
+        
+        if isFiltering {
+            student = filteredStudents[indexPath.row]
+        } else {
+           // student = students!.profiles[indexPath.row]
+        }
 
         return tableViewCell
     }
@@ -119,4 +147,25 @@ class TableViewController: UITableViewController {
     }
     */
 
+}
+
+@available(iOS 11.0, *)
+extension TableViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+    
+    private func filterContentForSearchText(_ searchText: String) {
+        filteredStudents = (students?.profiles.filter({ (stud: Profile) -> Bool in
+            return stud.lastName.lowercased().contains(searchText.lowercased())
+        }) ?? [])
+        
+//        filteredStudents = (students?.profiles.filter({ (students: Profile) -> Bool in
+//            return students.name.lowercased().contains(searchText.lowercased())
+//        }))!
+        
+        tableView.reloadData()
+    }
+    
 }

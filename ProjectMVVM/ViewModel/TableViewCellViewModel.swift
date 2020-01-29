@@ -16,7 +16,7 @@ class TableViewCellViewModel: TableViewCellViewModelType {
         return profile.name + " " + profile.lastName
     }
     var age: String {
-        return String(describing: profile.age)
+        return profile.gender
     }
     
     init(profile: Profile) {

@@ -13,9 +13,12 @@ class ViewModel: TableViewViewModelType {
     private var selectedIndexPath: IndexPath?
     
     var profiles = [
-        Profile(name: "StringN1", lastName: "StringLN1", age: 11),
-        Profile(name: "StringN2", lastName: "StringLN2", age: 12),
-        Profile(name: "StringN3", lastName: "StringLN3", age: 13)
+        Profile(name: "Roman", lastName: "Pirce", gender: "M", rating: 5),
+        Profile(name: "Vova", lastName: "Sevos", gender: "M", rating: 5),
+        Profile(name: "Vlad", lastName: "Levd", gender: "M", rating: 5),
+        Profile(name: "Ivan", lastName: "Pepud", gender: "M", rating: 5),
+        Profile(name: "Roza", lastName: "Luky", gender: "F", rating: 5),
+        Profile(name: "Roman", lastName: "Mangub", gender: "M", rating: 5)
     ]
     
     // передача ячеек

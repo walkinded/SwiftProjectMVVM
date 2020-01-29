@@ -11,5 +11,6 @@ import Foundation
 struct Profile {
     var name: String
     var lastName: String
-    var age: Int
+    var gender: String
+    var rating: Int
 }

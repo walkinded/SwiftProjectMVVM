@@ -13,7 +13,7 @@ class DetailViewModel: DetailViewModelType {
     private var profile: Profile
     
     var description: String {
-        return String(describing: "\(profile.name) \(profile.lastName) is \(profile.age) old")
+        return String(describing: "\(profile.name) \(profile.lastName) : \(profile.rating), gender: \(profile.gender)")
     }
     
     init(profile: Profile) {
